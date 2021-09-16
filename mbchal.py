@@ -19,9 +19,9 @@ def make_request_url(results_per_page, current_page_number):
     )
 
 def get_result(current_page_number):
-    s = requests.Session()
-    url = make_request_url(results_per_page, current_page_number)
-    resp = s.get(url, verify=False)
+    with requests.session() as s:
+        url = make_request_url(results_per_page, current_page_number)
+        resp = s.get(url, verify=False)
 
     if resp.status_code != 200:
         raise Exception(resp.status_code)
@@ -29,12 +29,9 @@ def get_result(current_page_number):
     raw = resp.json()  #dict
     data = raw.get("data")  #list
 
-    # If  length smaller than results_per_page (100), 
-    # that means there is no more pages
     if len(data) < results_per_page:
         return data
 
-    # Otherwise, advance the page number and do a recursion
     return data + get_result(current_page_number + 1)  # concat lists
 
 # def puttocsv(datablock):
