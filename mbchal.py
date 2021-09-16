@@ -1,6 +1,6 @@
 # !/bin/env python3
 
-import requests, json, json2html, csv, pandas
+import requests, json, csv, pandas
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
