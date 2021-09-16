@@ -41,18 +41,17 @@ def get_result(current_page_number):
 #         cw.writeheader()
 #         cw.writerows(datablock)
 
-# def path_to_image_html(path):
-#     return '<img src="'+ path + '" width="60" >'
-
 def pandastohtml(datablock):
     df = pandas.DataFrame(datablock)
     with open('mbchal.html', 'w') as f:
-        df.to_html(f)
+        df.to_html(buf=f,escape=False)
     
 def main():
     datablock = get_result(1) #list of jsons
+    for block in datablock:
+        block['avatar'] = '<img src="' + block['avatar'] + '" width="60" >'
     pandastohtml(datablock)
-    
+ 
     # Then you can print the data or save it to a file
 
 if __name__ == "__main__":
