@@ -6,7 +6,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 rrurl = 'https://reqres.in/api/users'
-results_per_page = 100
+results_per_page = 5
 
 #to check for pagination
 def make_request_url(results_per_page, current_page_number):
@@ -14,7 +14,7 @@ def make_request_url(results_per_page, current_page_number):
         "https://reqres.in/api/users"
         + "?per_page="
         + str(results_per_page)
-        + "&page_number="
+        + "&page="
         + str(current_page_number)
     )
 
@@ -26,11 +26,11 @@ def get_result(current_page_number):
     if resp.status_code != 200:
         raise Exception(resp.status_code)
 
-    raw = resp.json()  #dict
+    raw = resp.json() 
     data = raw.get("data")  #list
 
-    if len(data) < results_per_page:
-        return data
+    if (raw["page"] == raw["total_pages"]):
+         return data
 
     return data + get_result(current_page_number + 1)  # concat lists
 
@@ -40,6 +40,7 @@ def get_result(current_page_number):
 #         cw = csv.DictWriter(f,title,delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 #         cw.writeheader()
 #         cw.writerows(datablock)
+
 
 def pandastohtml(datablock):
     df = pandas.DataFrame(datablock)
