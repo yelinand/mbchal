@@ -74,7 +74,7 @@ async def gather_data(url_list):
 def pandastohtml(datablock):
     df = pandas.DataFrame(datablock)
     with open('mbchal.html', 'w') as f:
-        df.to_html(buf=f,escape=False)
+        df.to_html(buf=f,escape=False,index=False)
     
 def main():
     
@@ -84,6 +84,7 @@ def main():
     flat_datablock = [item for sublist in datablock for item in sublist]
     for block in flat_datablock:
         block['avatar'] = '<img src="' + block['avatar'] + '" width="60" >'
+    flat_datablock.sort(key=lambda s: s['id'])
     pandastohtml(flat_datablock)
  
     # Then you can print the data or save it to a file
